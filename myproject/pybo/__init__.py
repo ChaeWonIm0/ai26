@@ -1,8 +1,9 @@
 from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 from sqlalchemy import MetaData
-import config
+# import config
 from flaskext.markdown import Markdown
 
 naming_convention = {
@@ -18,9 +19,12 @@ migrate = Migrate()
 
 def create_app():
     app = Flask(__name__)  # flask 뷰 기본
-    
+
     # ORM을 적용하기 위해서 SQLite와 SQLAlchemy 사용
-    app.config.from_object(config)
+    # app.config.from_object(config)
+
+    # 환경변수 APP_CONFIG_FILE에서 정의된 파일을 환경파일로 사용
+    app.config.from_envvar('APP_CONFIG_FILE')
 
     #  ORM
     db.init_app(app)
@@ -31,7 +35,8 @@ def create_app():
     from . import models
 
     # 블루프린트로 라우팅함수 관리함
-    from .views import main_views, diary_views, answer_views, auth_views, query, notice_views, tts, grammar, tag, profile_views
+    # from .views import main_views, diary_views, answer_views, auth_views, query, notice_views, tts, grammar, tag, profile_views
+    from .views import main_views, diary_views, answer_views, auth_views, notice_views, grammar, profile_views
     app.register_blueprint(main_views.bp)
     # 블루프린트에 diary_views도 적용
     app.register_blueprint(diary_views.bp)
@@ -40,7 +45,7 @@ def create_app():
     # 회원가입 기능을 위한 블루프린트 등록
     app.register_blueprint(auth_views.bp)
     app.register_blueprint(notice_views.bp)
-    app.register_blueprint(tts.bp)
+    # app.register_blueprint(tts.bp)
     app.register_blueprint(grammar.grammar)
     app.register_blueprint(profile_views.bp)
     # 필터
@@ -61,6 +66,16 @@ def create_app():
         redirect_to="google.login",
     )
     app.register_blueprint(google_bp, url_prefix="/login")
+
+    from .models import User
+    # flask-login 적용
+    login_manager = LoginManager()
+    login_manager.login_view = "auth.login"
+    login_manager.init_app(app)
+
+    @login_manager.user_loader
+    def load_user(id):
+        return User.query.get(id)  # primary key
 
     return app
 

@@ -1,0 +1,1 @@
+# config 디렉터리가 'package'라는 것을 의미함

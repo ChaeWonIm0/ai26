@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<main id="main" class="main">
+  <div class="container my-1 justify-content-center">
+    <h2>불쌍한 개발자에게 자비를 베풀어보세요!</h2>
+    <div class="col-lg-3">
+      QR코드를 찍으면 토스로 이동합니다.
+    </div>
+    <div class="row align-items-center justify-content-center">
+      <div class="col-lg-6 col-md-6 col-sm-12 my-2">
+        <div class="card">
+          <h4 class="card-body" style="white-space : pre-line">500원 후원하기</h4>
+          <img src="{{ url_for('static', filename= 'assets/img/500won2.jpg') }}" alt="500won" width="50%">
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-12 my-2">
+        <div class="card">
+          <h4 class="card-body" style="white-space : pre-line">1000원 후원하기</h4>
+          <img src="{{ url_for('static', filename= 'assets/img/1000won2.jpg') }}" alt="1000won" width="50%">
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+{% endblock %}

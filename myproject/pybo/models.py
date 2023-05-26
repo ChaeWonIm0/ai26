@@ -15,11 +15,12 @@ class Diary(db.Model):
     subject = db.Column(db.String(100), nullable=False)
     content = db.Column(db.Text(), nullable=False)
     create_date= db.Column(db.DateTime(), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='SET NULL'), nullable=True)
     user = db.relationship('User', backref = db.backref('diary_set'))
     modify_date = db.Column(db.DateTime(), nullable=True)
     tags = db.Column(db.String(400), nullable=True)
     voter = db.relationship('User', secondary=diary_voter, backref=db.backref('diary_voter_set')) # 추천인
+    vote_count = db.Column(db.Integer, default=0, nullable=True)
 
 
 
@@ -45,9 +46,12 @@ class User(db.Model):
     username = db.Column(db.String(10), unique=True, nullable = False)
     password = db.Column(db.String(12), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    nickname = db.Column(db.String(20))
+    nickname = db.Column(db.String(20), nullable=False)
     name = db.Column(db.String(20), nullable=False)
     dayofbirth = db.Column(db.String(8), nullable=False)
+    is_active = db.Column(db.Boolean(), default=True) # is_active 속성
+    def get_id(self): # get_id 오류 해결용
+        return str(self.id)
 
 
 # 공지사항

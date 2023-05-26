@@ -44,10 +44,11 @@ h6 {
 
 .nav-link {
   font-size : 100%;
-  margin-right : 7.5px;
-  white-space : nowrap;
+  margin-right: 6px;
+  margin-left: 6px;
   font-family: 'Noto Sans KR', sans-serif;
 }
+
 /*--------------------------------------------------------------
 # Main
 --------------------------------------------------------------*/
@@ -64,7 +65,7 @@ h6 {
 }
 
 /*--------------------------------------------------------------
-# index Page
+# index Page, buttons, 초기화면과 버튼 제어문
 --------------------------------------------------------------*/
 .index_pagetitle {
   margin-bottom: 10px;
@@ -72,7 +73,7 @@ h6 {
 
 .index_pagetitle h1 {
   font-size: 100px;
-  margin-top : 10%;
+  margin-top : 6.5%;
 
   font-weight: 600;
   color: #00294d;
@@ -95,7 +96,7 @@ h6 {
 
 }
 
-.index_button .start {
+.general_button {
   border-radius: 25px;
   border: none;
   width: 100px;
@@ -105,6 +106,53 @@ h6 {
   font-weight:600;
   background-color: #0086ff;
   color:#ffffff;
+}
+
+.general_button_flex {
+  border-radius: 25px;
+  border: none;
+  width: flex;
+  height: flex;
+  margin-right: 15px;
+  margin-left: 15px;
+  font-weight:600;
+  background-color: #0086ff;
+  color:#ffffff;
+}
+
+.secondary_button {
+  border-radius: 25px;
+  border: none;
+  width: 100px;
+  height: 40px;
+  margin-right: 15px;
+  margin-left: 15px;
+  font-weight:600;
+  background-color: #808080;
+  color:#ffffff;
+}
+
+.secondary_button_flex {
+  border-radius: 25px;
+  border: none;
+  width: flex;
+  height: flex;
+  margin-right: 15px;
+  margin-left: 15px;
+  font-weight:400;
+  background-color: #808080;
+  color:#ffffff;
+}
+
+.secondary_button_outline {
+  border-radius: 25px;
+  width: 100px;
+  height: 40px;
+  margin-right: 15px;
+  margin-left: 15px;
+  font-weight:600;
+  background-color: #ffffff
+  color:#808080;
 }
 
 /*--------------------------------------------------------------
@@ -207,7 +255,7 @@ h6 {
 
 .sharedcard-pagetitle h1 {
   font-size: 40px;
-  margin: 30px 0 20px 0;
+  margin: 30px 0 0 0;
   font-weight: 600;
   color: #00294d;
   text-align: center;
@@ -218,6 +266,10 @@ h6 {
   font-weight: 600;
   color: #00294d;
   padding: 10px;
+  white-space: nowrap; /* 줄바꿈 방지 */
+  overflow: hidden; /* 넘친 내용 숨김 */
+  text-overflow: ellipsis; /* 넘친 내용을 ...으로 표시 */
+  max-width: 20ch; /* 최대 글자수 지정 */
 }
 
 
@@ -229,7 +281,7 @@ h6 {
   white-space: nowrap; /* 줄바꿈 방지 */
   overflow: hidden; /* 넘친 내용 숨김 */
   text-overflow: ellipsis; /* 넘친 내용을 ...으로 표시 */
-  max-width: 25ch; /* 최대 글자수 지정 */
+  max-width: 20ch; /* 최대 글자수 지정 */
 }
 
 
@@ -249,7 +301,7 @@ h6 {
   flex-direction: row; /* 가로 방향으로 정렬 */
   flex-wrap: wrap; /* 너비가 넘칠 경우 자동으로 다음 줄로 이동 */
   justify-content : center;
-  padding : 110px 110px 90px 110px
+  padding : 30px 110px 90px 110px
 }
 
 .diary-list a{
@@ -559,8 +611,8 @@ h6 {
 }
 
 .logo img {
-  max-height: 35px;
-  margin-right: 10px;
+  max-height: 25px;
+  margin-right: 15px;
 
 }
 
@@ -575,7 +627,7 @@ h6 {
 .header {
   transition: all 0.5s;
   z-index: 997;
-  height: 5%;
+  height: 6%;
   /* box-shadow: 0px 2px 10px rgba(1, 41, 112, 0.1); */
   background-color: #0086ff;
   padding: 20px;
@@ -594,24 +646,7 @@ h6 {
 }
 
 
-@media (max-width: 1199px) {
-  .header .search-bar {
-    position: relative;
-    top: 50px;
-    left: 0;
-    right: 50;
-    padding: 10px;
 
-    margin-right : 10px;
-    box-shadow: 0px 0px 15px 0px rgba(1, 41, 112, 0.1);
-    background: white;
-    z-index: 9999;
-    transition: 0.3s;
-    visibility: hidden;
-    opacity: 0;
-  }
-
-}
 
 /*--------------------------------------------------------------
 # Header Nav
@@ -639,13 +674,13 @@ h6 {
 }
 
 .header-nav .nav-profile img {
-  padding-left : 5%;
-  padding-right : 5%;
-  max-height: 36px;
+  padding-left : 2.5%;
+  padding-right : 2.5%;
+  max-height: 35px;
 }
 
 .header-nav .nav-profile span {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
 }
 
@@ -853,13 +888,14 @@ h6 {
 .sidebar-nav .nav-link {
   display: flex;
   align-items: center;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
+  font-family: 'Noto Sans KR', sans-serif;
   color: #0086ff;
   transition: 0.3;
   background: #f6f9ff;
-  padding: 10px 15px;
-  border-radius: 4px;
+  padding: 20px;
+  border-radius: 10px;
 }
 
 .sidebar-nav .nav-link i {
@@ -1198,7 +1234,7 @@ h6 {
   color: #012970;
 }
 
-.profile .profile-overview .row {
+/*.profile .profile-overview .row {
   margin-bottom: 10px;
   font-size: 15px;
   white-space : nowrap;
@@ -1211,7 +1247,7 @@ h6 {
 .profile .profile-overview .label {
   font-weight: 600;
   color: rgba(1, 41, 112, 0.6);
-}
+}*/
 
 .profile .profile-edit label {
   font-weight: 600;
@@ -1419,20 +1455,67 @@ h6 {
 }
 
 /* -------------------------------- */
-/* calendar CSS */
+/* calendar CSS, 달력 */
 /* -------------------------------- */
+.calendarcard{
+  border: none;
+  width : auto;
+  border-radius: 15px;
+  box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
+}
 
-.td{
-  width: 50px;
-  height: 50px;
-  text-align: center;
-  font-size: 20px;
-  font-family: 굴림;
-  border:2px ;
-  border-color:#3333FF;
-  border-radius : 8px;/*모서리 둥글게*/
-  }
+.Calendar {
+    text-align: center;
+    margin: 15px;
+}
 
-  #calendar {
-    align-items : center;
-  }
+.Calendar>thead>tr:first-child>td {
+    font-weight: bold;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 1.5em;
+    padding-bottom: 1.5em;
+}
+
+.Calendar>thead>tr:last-child>td {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight : 600;
+}
+
+.Calendar>tbody>tr>td>p {
+    font-family: 'Noto Sans KR', sans-serif;
+    height: flex;
+    width: flex;
+    border-radius: 45px;
+    transition-duration: .2s;
+    line-height: 45px;
+    margin: 2.5px;
+    display: block;
+    text-align: center;
+}
+
+.pastDay{
+    color: lightgray;
+}
+
+.today {
+    background-color: #0086ff;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.futureDay {
+    background-color: #FFFFFF;
+    cursor: pointer;
+}
+.futureDay:hover{
+    background:#eee;
+}
+
+.futureDay.choiceDay,
+.today.choiceDay {
+    background: #0A174E;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+}

@@ -23,6 +23,8 @@
       </div>
     </div>
   </div>
+  <br><br>
+
     {% if diary_list %}
     {% for diary in diary_list.items %}
     <a href="{{ url_for('diary.detail', diary_id=diary.id) }}">
@@ -144,5 +146,7 @@ $(".so").on('change', function() {
         $("#page").val(1);
         $("#searchForm").submit();
     });
+
 </script>
+
 {% endblock %}

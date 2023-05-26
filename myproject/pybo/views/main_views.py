@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, url_for
 from werkzeug.utils import redirect
+from flask_login import login_required, current_user
 
 # 게시판 질문 목록 템플릿 준비
 from pybo.models import Diary

@@ -7,22 +7,22 @@
       <br>
       <h1>Hello!</h1>
       <br/>
-      <h2>틀린 문법을 콕! 집어주는<br/>
-      영문법 학습 일기장, 콕!Tale 입니다.</h2>
+      <h2>숨가쁘게 달려온 오늘,<br><br> 당신의 하루는 어땠나요?<br/><br>
+       AI와 영어로 마무리하는 나의 하루.</h2>
     </div><!-- End Page Title -->
 
 
   <div id="index_button" class="index_button">
 
     {% if g.user %}
-    <a href="{{ url_for('diary.create') }}" class = "btn btn-primary">시작하기</a>
+    <button type="button" class="general_button" onclick="location.href='{{ url_for('diary.create') }}'">시작하기</button>
     {% else %}
-    <a href="{{ url_for('diary.create') }}" class = "btn btn-primary">시작하기</a>
-    <a href="{{ url_for('auth.login') }}" class="btn btn-primary">로그인</a>
+    <button type="button" class="general_button" onclick="location.href='{{ url_for('diary.create') }}'">시작하기</button>
+    <button type="button" class="general_button" onclick="location.href='{{ url_for('auth.login') }}'">로그인</button>
     {% endif %}
   </div>
 
 
-    </main>
+  </main>
   <!-- End #main -->
   {% endblock %}

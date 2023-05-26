@@ -1,5 +1,6 @@
 # 회원가입 기능을 위한 블루프린트 구현
 from flask import Blueprint, url_for, render_template, flash, request, session, g
+from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import redirect
 
@@ -24,7 +25,9 @@ def signup():
                         dayofbirth=form.dayofbirth.data)
             db.session.add(user)
             db.session.commit()
-            return redirect(url_for('main.index'))
+
+            login_user(user, remember=True)
+            return redirect(url_for('auth.login'))
         else:
             flash('이미 존재하는 사용자입니다.')
     return render_template('auth/signup.html', form=form)
@@ -42,6 +45,7 @@ def login():
         if error is None:
             session.clear()
             session['user_id'] = user.id
+            login_user(user, remember=True)
             return redirect(url_for('main.index'))
         flash(error)
     return render_template('auth/login.html', form=form)
@@ -57,38 +61,41 @@ def load_logged_in_user():
 
 @bp.route('/logout/')
 def logout():
+    logout_user()
     session.clear()
     return redirect(url_for('main.index'))
 
 
-
-from flask import Flask, redirect, url_for
+from flask import Flask, render_template, request
 from flask_dance.contrib.google import make_google_blueprint, google
 
 # ...
 
-google_bp = make_google_blueprint(client_id="136279422951-4nr61veh2kajbg1tcqaggnc7uqh1hl38.apps.googleusercontent.com",
-                                   client_secret="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",
-                                   scope=["profile", "email"])
-
-app = Flask(__name__)
-app.register_blueprint(google_bp, url_prefix="/auth")
-
-@app.route("/login/google")
-def googlelogin():
-    if not google.authorized:
-        return redirect(url_for("google.login"))
-    resp = google.get("/oauth2/v2/userinfo")
-    assert resp.ok, resp.text
-    email = resp.json()["email"]
-    # 로그인 처리 로직 구현
-    return redirect(url_for("main.index"))
-
-# 구글 로그인
-from flask_dance.consumer import OAuth2ConsumerBlueprint
-
-google_bp = OAuth2ConsumerBlueprint("google", __name__,
-                                        client_id="136279422951-4nr61veh2kajbg1tcqaggnc7uqh1hl38.apps.googleusercontent.com",
-                                        client_secret="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",
-                                        scope=["profile", "email"],
-                                        redirect_url="/auth/google/login/callback")
+# google_bp = make_google_blueprint(client_id="136279422951-4nr61veh2kajbg1tcqaggnc7uqh1hl38.apps.googleusercontent.com",
+#                                    client_secret="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",
+#                                    scope=["profile", "email"])
+# from flask_dance.consumer import OAuth2ConsumerBlueprint
+# google_bp = OAuth2ConsumerBlueprint("google", __name__,
+#                                         client_id="136279422951-4nr61veh2kajbg1tcqaggnc7uqh1hl38.apps.googleusercontent.com",
+#                                         client_secret="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",
+#                                         scope=["profile", "email"],
+#                                         redirect_uri="http://localhost:5000/auth/login/")
+#
+#
+# app = Flask(__name__)
+# app.secret_key = "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"
+# app.register_blueprint(google_bp, url_prefix="/auth")
+# #
+# @google_bp.route("/login/")
+# def login():
+#     if not google.authorized:
+#         return redirect(url_for("google.login"))
+#     resp = google.get("/oauth2/v2/userinfo")
+#     assert resp.ok, resp.text
+#     email = resp.json()["email"]
+#     # 로그인 처리 로직 구현
+#     return redirect(url_for("main.index"))
+#
+# # 구글 로그인
+# if __name__ == "__main__":
+#     app.run(debug=True)

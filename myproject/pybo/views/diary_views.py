@@ -34,6 +34,7 @@ def _list():
                     sub_query.c.username.ilike(search) # 댓글 쓴사람
                     ) \
             .distinct()
+        diary_list = diary_list.paginate(page=page, per_page=8)
         return render_template('diary/diary_list.html', diary_list=diary_list, page=page, kw=kw)
     # 좋아요 순 정렬
     if so == 'recommend':
@@ -53,15 +54,43 @@ def _list():
         diary_list = Diary.query.order_by(Diary.create_date.asc())
     else:
         diary_list = Diary.query.order_by(Diary.create_date.desc())
-
     diary_list = diary_list.paginate(page=page, per_page=8)
     return render_template('diary/diary_list.html', diary_list=diary_list, page=page, kw=kw)
 
+# 배진혁 이음동의어 코드 수정 시작
+from transformers import T5Tokenizer, T5ForConditionalGeneration
+# 이음동의어 모델 로드
+tokenizer3 = T5Tokenizer.from_pretrained('prithivida/parrot_paraphraser_on_T5')
+model3 = T5ForConditionalGeneration.from_pretrained('prithivida/parrot_paraphraser_on_T5')
+# 시간복잡도
+import time
+# 디테일페이지
 @bp.route('/detail/<int:diary_id>/')
 def detail(diary_id):
     form = AnswerForm()
     diary = Diary.query.get_or_404(diary_id)
     return render_template('diary/diary_detail.html', diary=diary, form=form)
+
+# 이음동의어 함수
+@bp.route('/detail/<int:diary_id>', methods=('POST',))
+def get_paraphrase(diary_id):
+    form = AnswerForm()
+    diary = Diary.query.get_or_404(diary_id)
+    if 'submit' in request.form:
+        input_text = request.form['input_text']
+
+        start_time = time.time()  # parrot 시작시간 저장
+        inputs = tokenizer3.encode("paraphrase: " + input_text, return_tensors="pt")
+        outputs = model3.generate(inputs, max_length=2048, do_sample=True, num_return_sequences=5) # max_length 조정(상준이 일기로 실험시 중간에 삭제)
+        paraphrases = [tokenizer3.decode(output, skip_special_tokens=True) for output in outputs]
+        end_time = time.time()  # parrot 종료 시간 저장
+        execution_time = end_time - start_time  # parrot 실행시간 계산
+        return render_template('diary/diary_detail.html', input_text=input_text, paraphrases=paraphrases, diary=diary, form=form, execution_time=execution_time)
+    return render_template('diary/diary_detail.html', diary=diary, form=form)
+
+@bp.route('/instruction/')
+def instruction():
+    return render_template('diary/instruction.html')
 
 # create 라우팅 함수 작성 - GET, POST을 모두 처리하고 라벨이나 입력폼 사용시 필요
 @bp.route('/create/', methods=('GET','POST'))
@@ -89,7 +118,7 @@ def modify(diary_id):
             form.populate_obj(diary)
             diary.modify_date = datetime.now()  # 수정일시 저장
             db.session.commit()
-            return redirect(url_for('diary.detail', diary_id=diary_id))
+            return redirect(url_for('diary.detail', diary_id=diary_id, form=form))
     else: # GET 요청
         form = DiaryForm(obj=diary)
     return render_template('diary/diary_form_modify.html', form=form)
@@ -111,7 +140,7 @@ def delete(diary_id):
 def vote(diary_id):
     _diary = Diary.query.get_or_404(diary_id)
     if g.user == _diary.user:
-        _diary.voter.append(g.user )
+        _diary.voter.append(g.user)
         if _diary.vote_count is None:
             _diary.vote_count = 0
         _diary.vote_count += 1
@@ -132,3 +161,9 @@ def review(diary_id):
     diary.review_set.append(review)
     db.session.commit()
     return redirect(url_for('diary.form', diary_id=diary_id))
+
+@bp.route('/donation/')
+def donation():
+    return render_template('diary/donate.html')
+
+

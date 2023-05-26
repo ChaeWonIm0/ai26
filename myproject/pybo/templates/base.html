@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport">
 
-  <title>콕! tale</title>
+  <title>먹고, 쓰고, 자고.</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -71,7 +71,97 @@
   <!-- Template Main JS File -->
   <script src="{{ url_for('static', filename= 'assets/js/main.js') }}"></script>
 
+  <!--jquery 추가함-->
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    setTimeout(function() {
+      document.getElementById("sidebarclick").click();
+    },15);
+  });
+</script>
 
+<!-- calender script-->
+    <script>
+      window.onload = function () { buildCalendar(); }
+
+      let nowMonth = new Date();
+      let today = new Date();
+      today.setHours(0,0,0,0);
+
+      function buildCalendar() {
+
+          let firstDate = new Date(nowMonth.getFullYear(), nowMonth.getMonth(), 1);
+          let lastDate = new Date(nowMonth.getFullYear(), nowMonth.getMonth() + 1, 0);
+
+          let tbody_Calendar = document.querySelector(".Calendar > tbody");
+          document.getElementById("calYear").innerText = nowMonth.getFullYear();
+          document.getElementById("calMonth").innerText = leftPad(nowMonth.getMonth() + 1);
+
+          while (tbody_Calendar.rows.length > 0) {
+              tbody_Calendar.deleteRow(tbody_Calendar.rows.length - 1);
+          }
+
+          let nowRow = tbody_Calendar.insertRow();
+
+          for (let j = 0; j < firstDate.getDay(); j++) {
+              let nowColumn = nowRow.insertCell();
+          }
+
+          for (let nowDay = firstDate; nowDay <= lastDate; nowDay.setDate(nowDay.getDate() + 1)) {
+
+              let nowColumn = nowRow.insertCell();
+              nowColumn.innerText = leftPad(nowDay.getDate());
+
+
+              if (nowDay.getDay() == 0) {
+                  nowColumn.style.color = "#DC143C";
+              }
+              if (nowDay.getDay() == 6) {
+                  nowColumn.style.color = "#0000CD";
+                  nowRow = tbody_Calendar.insertRow();
+              }
+
+
+              if (nowDay < today) {
+                  nowColumn.className = "pastDay";
+              }
+              else if (nowDay.getFullYear() == today.getFullYear() && nowDay.getMonth() == today.getMonth() && nowDay.getDate() == today.getDate()) {
+                  nowColumn.className = "today";
+                  nowColumn.onclick = function () { choiceDate(this); }
+              }
+              else {
+                  nowColumn.className = "futureDay";
+                  nowColumn.onclick = function () { choiceDate(this); }
+              }
+          }
+      }
+
+
+      function choiceDate(nowColumn) {
+          if (document.getElementsByClassName("choiceDay")[0]) {
+              document.getElementsByClassName("choiceDay")[0].classList.remove("choiceDay");
+          }
+          nowColumn.classList.add("choiceDay");
+      }
+
+      function prevCalendar() {
+          nowMonth = new Date(nowMonth.getFullYear(), nowMonth.getMonth() - 1, nowMonth.getDate());
+          buildCalendar();
+      }
+      function nextCalendar() {
+          nowMonth = new Date(nowMonth.getFullYear(), nowMonth.getMonth() + 1, nowMonth.getDate());
+          buildCalendar();
+      }
+
+      function leftPad(value) {
+          if (value < 10) {
+              value = "0" + value;
+              return value;
+          }
+          return value;
+      }
+  </script>
 
 <!--자바스크립트 시작-->
 {% block script %}
