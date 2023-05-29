@@ -108,4 +108,9 @@ Attempt to use Lightsail 4GB ($20 version)
 
 
 ### 230528 Try to Azure App Service. 
-- Deploy not yet...
+- Default domain : myprojectdiary.azurewebsites.net
+- github project : https://github.com/ChaeWonIm0/ai26
+### But...
+![image](https://github.com/ChaeWonIm0/ai26/assets/114221089/15e68e0d-7466-49a1-be97-20960bbf267c)
+
+#### Deploy Fail
