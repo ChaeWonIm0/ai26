@@ -107,3 +107,5 @@ Attempt to use Lightsail 4GB ($20 version)
 ![image](https://github.com/jinhyukbae/ai26/assets/114221089/4ec34abe-c459-49a9-a817-7e2116bb8d07)
 
 
+### 230528 Try to Azure App Service. 
+- Deploy not yet...
